@@ -10,23 +10,53 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 import joblib
 
+import random
+
 def download_data():
-    print("Downloading ISOT dataset...")
-    # Placeholder URLs - ISOT is large so we simulate a smaller download or require manual download
-    # In a real scenario, use kagglehub or direct urls.
-    # We will create a dummy dataset for demonstration if not found.
-    if not os.path.exists("Fake.csv"):
-        print("Creating mock dataset for training...")
-        fake_data = pd.DataFrame({"text": ["Fake news is everywhere", "Aliens landed exactly here!"], "label": [0, 0]})
-        real_data = pd.DataFrame({"text": ["The government passed a new law.", "Scientists discover new species."], "label": [1, 1]})
-        df = pd.concat([fake_data, real_data])
-    else:
+    import os
+    if os.path.exists("Fake.csv") and os.path.exists("True.csv"):
+        print("Using real ISOT dataset files (Fake.csv and True.csv)...")
         fake_df = pd.read_csv("Fake.csv")
         true_df = pd.read_csv("True.csv")
         fake_df['label'] = 0
         true_df['label'] = 1
         df = pd.concat([fake_df, true_df])
+        # Return a sample if it's too huge to train quickly on a local PC, or full dataframe
+        # df = df.sample(frac=1).reset_index(drop=True)
+        return df
+
+    print("Actual CSV files not found. Generating robust synthetic dataset for training...")
+    
+    # Synthetic dataset components
+    fake_subjects = ["Trump", "Biden", "Elon Musk", "The President", "Celebrity", "Aliens", "Scientists"]
+    fake_actions = ["died", "arrested for", "exposed in", "secretly funding", "caught with", "hiding"]
+    fake_objects = ["last night", "massive scandal", "UFO hoax", "secret microchips", "illegal scheme", "illuminati"]
+    fake_buzz = ["SHOCKING", "BREAKING", "EXCLUSIVE", "YOU WON'T BELIEVE", "100% REAL", "BANNED"]
+    
+    real_subjects = ["The government", "Senate", "Researchers", "The economy", "Global markets", "Local authorities", "Scientists"]
+    real_actions = ["passed", "discovered", "reported", "announced", "projected", "investigated", "published"]
+    real_objects = ["a new law", "significant growth", "a novel species", "policy changes", "budget cuts", "new infrastructure"]
+    
+    fake_texts = []
+    real_texts = []
+    
+    # Generate 1500 fake news samples
+    for _ in range(1500):
+        headline = f"{random.choice(fake_buzz)}: {random.choice(fake_subjects)} {random.choice(fake_actions)} {random.choice(fake_objects)}!"
+        if random.random() > 0.5: headline = headline.upper()
+        fake_texts.append(headline.lower())
+        
+    # Generate 1500 real news samples
+    for _ in range(1500):
+        headline = f"{random.choice(real_subjects)} {random.choice(real_actions)} {random.choice(real_objects)}."
+        real_texts.append(headline.lower())
+        
+    fake_data = pd.DataFrame({"text": fake_texts, "label": [0]*1500})
+    real_data = pd.DataFrame({"text": real_texts, "label": [1]*1500})
+    
+    df = pd.concat([fake_data, real_data]).sample(frac=1).reset_index(drop=True)
     return df
+
 
 def main():
     df = download_data()

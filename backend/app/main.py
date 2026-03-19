@@ -65,3 +65,4 @@ async def predict(req: PredictionRequest, request: Request):
         confidence=confidence,
         explanation=explanation
     )
+
