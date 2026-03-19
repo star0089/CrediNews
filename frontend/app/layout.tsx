@@ -23,7 +23,7 @@ export default function RootLayout({
           {children}
         </main>
         <footer className="py-6 text-center text-sm text-gray-400 bg-primary mt-12">
-          Authors: Mahesh Vyas (maheshvyas.data@gmail.com) & Jitendra Ghanchi (jeetuparihariya@gmail.com) | <a href="#" className="underline">GitHub</a>
+          Authors: Mahesh Vyas (maheshvyas.data@gmail.com) & Jitendra Ghanchi (jeetuparihariya@gmail.com) | <a href="https://github.com/star0089/CrediNews" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">GitHub Project</a>
         </footer>
       </body>
     </html>
