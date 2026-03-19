@@ -19,7 +19,8 @@ export default function CheckNews() {
     setError('');
     setLoading(true);
     try {
-      const res = await axios.post('http://localhost:8000/predict', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/+$/, '') || 'http://localhost:8000';
+      const res = await axios.post(`${apiUrl}/predict`, {
         text,
         model_name: model
       });
