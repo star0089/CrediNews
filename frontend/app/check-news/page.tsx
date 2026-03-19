@@ -19,7 +19,7 @@ export default function CheckNews() {
     setError('');
     setLoading(true);
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/+$/, '') || 'https://credinews-n950.onrender.com';
+      const apiUrl = 'https://credinews-n950.onrender.com';
       const res = await axios.post(`${apiUrl}/predict`, {
         text,
         model_name: model
